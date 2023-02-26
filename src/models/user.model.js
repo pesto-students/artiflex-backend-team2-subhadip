@@ -1,30 +1,25 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-mongoose.set('strictQuery', false);
+const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  created_at: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-const User = new mongoose.Schema(
-    {
-        name: {
-            type: String,
-            required: true
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true
-        },
-        password: {
-            type: String,
-            required: true
-        },
-        created_at: {
-            type: Date,
-            default: Date.now
-        }
-    },
-    { collation: 'user-data' }
-);
-
-const model = mongoose.model('UserData', User);
+const model = mongoose.model('User', UserSchema);
 
 export default model;
