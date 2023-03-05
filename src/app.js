@@ -17,7 +17,8 @@ app.use(errorHandler);
 app.use(cors());
 
 // const uri = 'mongodb://localhost:27017/artiflex';
-const uri = 'mongodb+srv://artiflex:artiflex@artiflex.48fvane.mongodb.net/?retryWrites=true&w=majority';
+const uri =
+  'mongodb+srv://artiflex:artiflex@artiflex.48fvane.mongodb.net/?retryWrites=true&w=majority';
 
 mongoose
   .connect(uri, {

@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Logger from '../utils/logger';
+import config from '../config';
 
 import UserModel from '../models/user.model';
 
@@ -19,49 +20,65 @@ const signUp = async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const result = await UserModel.create({
-      name: req.body.name,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
       email: req.body.email,
+      mobile_no: req.body.mobile_no,
       password: hashedPassword,
     });
 
-    // const token = jwt.sign({ email: result.email, id: result.id }, process.env.JWT_SECRET_KEY);
-    // res.status(201).json({ user: result, token: token });
-
     res.status(201).json({ user: result });
   } catch (error) {
-    console.log(error);
     res.status(400).send({ status: 'error', error: 'Something want wrong.' });
   }
 };
 
 const signIn = async (req, res) => {
-  console.log(req.body);
   try {
     const existingUser = await UserModel.findOne({ email: req.body.email });
     if (!existingUser) {
-      return res.status(401).json({ message: 'Authentication failed. User not found.' });
+      res
+        .status(401)
+        .json({ message: 'Authentication failed. User not found.' });
+      return;
     }
 
     // Check if the password is correct
-    const matchPassword = await bcrypt.compare(req.body.password, existingUser.password);
+    const matchPassword = await bcrypt.compare(
+      req.body.password,
+      existingUser.password
+    );
     if (!matchPassword) {
-      return res.status(401).json({ message: 'Authentication failed. Wrong password.' });
+      res
+        .status(401)
+        .json({ message: 'Authentication failed. Wrong password.' });
+      return;
     }
 
     // Create a JWT token with the user ID as the payload
-    const token = jwt.sign({ email: existingUser.email, id: existingUser.id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: 86400, // expires in 24 hours
-    });
+    const token = jwt.sign(
+      { email: existingUser.email, id: existingUser._id },
+      config.JWT_SECRET_KEY,
+      {
+        expiresIn: 86400, // expires in 24 hours
+      }
+    );
 
     // Return the token in the response
-    return res.status(201).json({ message: 'User Found', user: existingUser, token: token });
+    res.status(201).json({ message: 'User Found', user: existingUser, token });
+    return;
   } catch (error) {
-    console.log(error);
     res.status(500).send({ status: 'error', error: 'Something Want Wrong.' });
   }
+};
+
+const signInUser = async (req, res) => {
+  logger.info('Hello There');
+  res.status(201).json({ message: 'Hello There' });
 };
 
 export default {
   signUp,
   signIn,
+  signInUser,
 };

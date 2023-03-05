@@ -1,14 +1,30 @@
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-  name: {
+  first_name: {
     type: String,
-    required: true,
+    allowNull: false,
+    uniqueKey: false,
+  },
+  last_name: {
+    type: String,
+    allowNull: true,
+    uniqueKey: false,
+  },
+  image: {
+    type: String,
+    allowNull: true,
+    defaultValue:
+      'https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png',
   },
   email: {
     type: String,
     required: true,
     unique: true,
+  },
+  mobile_no: {
+    type: String,
+    allowNull: true,
   },
   password: {
     type: String,
