@@ -1,4 +1,4 @@
 import DemoRoutes from './demo.routes';
-import UserRoutes from './user.routes';
+import AuthRoutes from './auth.routes';
 
-export default { DemoRoutes, UserRoutes };
+export default { DemoRoutes, AuthRoutes };

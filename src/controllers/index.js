@@ -1,4 +1,4 @@
 import DemoController from './demo.controller';
-import UserController from './user.controller';
+import AuthController from './auth.controller';
 
-export { DemoController, UserController };
+export { DemoController, AuthController };

@@ -30,7 +30,7 @@ mongoose
   });
 
 app.use('/demo', Routes.DemoRoutes);
-app.use('/user', Routes.UserRoutes);
+app.use('/auth', Routes.AuthRoutes);
 
 app.listen(config.SERVER_PORT, () => {
   logger.info(`Server Is Up At http://localhost:${config.SERVER_PORT}`);

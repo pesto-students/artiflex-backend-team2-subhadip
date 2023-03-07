@@ -5,7 +5,7 @@ import config from '../config';
 
 import UserModel from '../models/user.model';
 
-const logger = Logger('user.controller');
+const logger = Logger('auth.controller.js');
 
 const signUp = async (req, res) => {
   try {
@@ -27,9 +27,11 @@ const signUp = async (req, res) => {
       password: hashedPassword,
     });
 
-    res.status(201).json({ user: result });
+    res
+      .status(201)
+      .json({ status: 'ok', message: 'User Created', user: result });
   } catch (error) {
-    res.status(400).send({ status: 'error', error: 'Something want wrong.' });
+    res.status(400).json({ status: 'error', error: 'Something want wrong.' });
   }
 };
 
@@ -37,9 +39,10 @@ const signIn = async (req, res) => {
   try {
     const existingUser = await UserModel.findOne({ email: req.body.email });
     if (!existingUser) {
-      res
-        .status(401)
-        .json({ message: 'Authentication failed. User not found.' });
+      res.status(401).json({
+        status: 'error',
+        message: 'Authentication failed. User not found.',
+      });
       return;
     }
 
@@ -49,9 +52,10 @@ const signIn = async (req, res) => {
       existingUser.password
     );
     if (!matchPassword) {
-      res
-        .status(401)
-        .json({ message: 'Authentication failed. Wrong password.' });
+      res.status(401).json({
+        status: 'error',
+        message: 'Authentication failed. Wrong password.',
+      });
       return;
     }
 
@@ -65,10 +69,15 @@ const signIn = async (req, res) => {
     );
 
     // Return the token in the response
-    res.status(201).json({ message: 'User Found', user: existingUser, token });
+    res.status(201).send({
+      status: 'ok',
+      message: 'User Found',
+      user: existingUser,
+      token,
+    });
     return;
   } catch (error) {
-    res.status(500).send({ status: 'error', error: 'Something Want Wrong.' });
+    res.status(500).json({ status: 'error', error: 'Something Want Wrong.' });
   }
 };
 
