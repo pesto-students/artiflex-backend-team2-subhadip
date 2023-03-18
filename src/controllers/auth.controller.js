@@ -14,7 +14,9 @@ const signUp = async (req, res) => {
     });
 
     if (existingUser) {
-      res.status(400).send({ status: 'ok', message: 'User already exists' });
+      res
+        .status(400)
+        .send({ status: 'success', message: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -29,7 +31,7 @@ const signUp = async (req, res) => {
 
     res
       .status(201)
-      .json({ status: 'ok', message: 'User Created', user: result });
+      .json({ status: 'success', message: 'User Created', user: result });
   } catch (error) {
     res.status(400).json({ status: 'error', error: 'Something want wrong.' });
   }
@@ -70,9 +72,9 @@ const signIn = async (req, res) => {
 
     // Return the token in the response
     res.status(201).send({
-      status: 'ok',
+      status: 'success',
       message: 'User Found',
-      user: existingUser,
+      // user: existingUser,
       token,
     });
     return;
@@ -81,13 +83,7 @@ const signIn = async (req, res) => {
   }
 };
 
-const signInUser = async (req, res) => {
-  logger.info('Hello There');
-  res.status(201).json({ message: 'Hello There' });
-};
-
 export default {
   signUp,
   signIn,
-  signInUser,
 };
