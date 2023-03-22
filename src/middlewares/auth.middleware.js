@@ -26,7 +26,6 @@ const AuthMiddleware = (req, res, next) => {
       return;
     }
     req.user = payload;
-    logger.info(JSON.stringify(payload));
     next();
   });
 };

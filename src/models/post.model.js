@@ -4,6 +4,8 @@ const PostSchema = new mongoose.Schema(
   {
     user_id: { type: Schema.Types.ObjectId, ref: 'User' },
     creater_id: { type: Schema.Types.ObjectId, ref: 'User' },
+    title: { type: String, allowNull: true },
+    description: { type: String, allowNull: true },
     post_url: { type: String, allowNull: true },
     post_type: { type: String, allowNull: false },
     tags: { type: String, allowNull: false },

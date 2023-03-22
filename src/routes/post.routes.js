@@ -5,5 +5,7 @@ import { AuthMiddleware } from '../middlewares';
 const PostRouter = express.Router();
 
 PostRouter.post('/create', AuthMiddleware, PostController.createPost);
+PostRouter.put('/update/:id', AuthMiddleware, PostController.updatePost);
+PostRouter.delete('/delete/:id', AuthMiddleware, PostController.deletePost);
 
 export default PostRouter;
