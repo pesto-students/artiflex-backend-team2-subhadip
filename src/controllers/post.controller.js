@@ -1,13 +1,13 @@
-import PostModel from '../models/post.model';
-
+import { PostService } from '../services';
 import Logger from '../utils/logger';
+import postService from '../services/post.service';
 
 const logger = Logger('post.controller');
 
 const createPost = async (req, res) => {
   try {
     const { user } = req;
-    const newPost = await new PostModel({
+    const newPost = {
       user_id: user.id,
       creater_id: user.id,
       title: req.body.title,
@@ -19,8 +19,8 @@ const createPost = async (req, res) => {
       post_price: req.body.post_price,
       like: req.body.like,
       dislike: req.body.dislike,
-    });
-    const post = await newPost.save();
+    };
+    const post = await PostService.createPost(newPost);
     res.status(201).json(post);
   } catch (error) {
     res.status(500).json({ status: 'error', error });
@@ -45,7 +45,7 @@ const updatePost = async (req, res) => {
       dislike: req.body.dislike,
     };
 
-    const updatedPost = await PostModel.findOneAndUpdate(
+    const updatedPost = await PostService.updatePost(
       { _id: id },
       { $set: updatePostData }
     );
@@ -62,7 +62,7 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedPost = await PostModel.deleteOne({ _id: id });
+    const deletedPost = await PostService.updatePost({ _id: id });
     res.status(200).json({ message: 'Post deleted successfully', deletedPost });
   } catch (err) {
     res
@@ -71,8 +71,20 @@ const deletePost = async (req, res) => {
   }
 };
 
+const getAllPosts = async (req, res) => {
+  try {
+    const allPosts = await postService.getAllPosts();
+    res.status(200).json({ message: 'Get all successfully', allPosts });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Error Fatching All Post', error: err.message });
+  }
+};
+
 export default {
   createPost,
   updatePost,
   deletePost,
+  getAllPosts,
 };

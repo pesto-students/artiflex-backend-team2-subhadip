@@ -10,9 +10,9 @@ const PostSchema = new mongoose.Schema(
     post_type: { type: String, allowNull: false },
     tags: { type: String, allowNull: false },
     for_sell: { type: Number, allowNull: false, defaultValue: 0 },
-    post_price: { type: String, allowNull: false, defaultValue: 0 },
-    like: { type: String, allowNull: false, defaultValue: 0 },
-    dislike: { type: String, allowNull: false, defaultValue: 0 },
+    post_price: { type: Number, allowNull: false, defaultValue: 0 },
+    like: { type: Number, allowNull: false, defaultValue: 0 },
+    dislike: { type: Number, allowNull: false, defaultValue: 0 },
   },
   {
     timestamps: true,
