@@ -1,9 +1,12 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Joi from 'joi';
 import Logger from '../utils/logger';
 import config from '../config';
 
 import UserModel from '../models/user.model';
+
+import { UserService } from '../services';
 
 const logger = Logger('auth.controller.js');
 
@@ -17,21 +20,37 @@ const signUp = async (req, res) => {
       res
         .status(400)
         .send({ status: 'success', message: 'User already exists' });
+    } else {
+      const userSchema = Joi.object({
+        first_name: Joi.string().required(),
+        last_name: Joi.string().required(),
+        email: Joi.string().required(),
+        mobile_no: Joi.string().required(),
+        password: Joi.string().required(),
+      });
+      const { error } = userSchema.validate(req.body);
+
+      if (error) {
+        res.status(500).json({ status: 'error', error });
+        return;
+      }
+
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+      const newUser = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        mobile_no: req.body.mobile_no,
+        password: hashedPassword,
+      };
+
+      const result = await UserService.createUser(newUser);
+
+      res
+        .status(201)
+        .json({ status: 'success', message: 'User Created', user: result });
     }
-
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-    const result = await UserModel.create({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      mobile_no: req.body.mobile_no,
-      password: hashedPassword,
-    });
-
-    res
-      .status(201)
-      .json({ status: 'success', message: 'User Created', user: result });
   } catch (error) {
     res.status(400).json({ status: 'error', error: 'Something want wrong.' });
   }

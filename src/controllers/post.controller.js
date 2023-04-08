@@ -1,11 +1,27 @@
-import { PostService } from '../services';
+import Joi from 'joi';
 import Logger from '../utils/logger';
-import postService from '../services/post.service';
+import { PostService } from '../services';
 
 const logger = Logger('post.controller');
 
 const createPost = async (req, res) => {
   try {
+    const postSchema = Joi.object({
+      title: Joi.string().required(),
+      description: Joi.string().required(),
+      post_url: Joi.string().required(),
+      post_type: Joi.string().required(),
+      tags: Joi.string().required(),
+      for_sell: Joi.number().required(),
+      post_price: Joi.number().required(),
+    });
+    const { error } = postSchema.validate(req.body);
+
+    if (error) {
+      res.status(500).json({ status: 'error', error });
+      return;
+    }
+
     const { user } = req;
     const newPost = {
       user_id: user.id,
@@ -21,7 +37,7 @@ const createPost = async (req, res) => {
       dislike: req.body.dislike,
     };
     const post = await PostService.createPost(newPost);
-    res.status(201).json(post);
+    res.status(201).json({ message: 'Post created successfully', post });
   } catch (error) {
     res.status(500).json({ status: 'error', error });
   }
@@ -73,7 +89,7 @@ const deletePost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
   try {
-    const allPosts = await postService.getAllPosts();
+    const allPosts = await PostService.getAllPosts();
     res.status(200).json({ message: 'Get all successfully', allPosts });
   } catch (err) {
     res
