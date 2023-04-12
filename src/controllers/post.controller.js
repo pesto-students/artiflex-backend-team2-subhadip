@@ -99,6 +99,22 @@ const deletePost = async (req, res) => {
   }
 };
 
+const getPost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const Post = await PostService.getPost({ _id: id });
+    res
+      .status(200)
+      .json({ status: 'success', message: 'Get post successfully.', Post });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Error fatching post.',
+      error: err.message,
+    });
+  }
+};
+
 const getAllPosts = async (req, res) => {
   try {
     const allPosts = await PostService.getAllPosts();
@@ -120,5 +136,6 @@ export default {
   createPost,
   updatePost,
   deletePost,
+  getPost,
   getAllPosts,
 };

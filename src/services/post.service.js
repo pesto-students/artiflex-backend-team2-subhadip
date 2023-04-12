@@ -15,6 +15,11 @@ const deletePost = async (id) => {
   return deletedPost;
 };
 
+const getPost = async (postData) => {
+  const Post = await PostModel.findOne(postData);
+  return Post;
+};
+
 const getAllPosts = async () => {
   const allPosts = await PostModel.find();
   return allPosts;
@@ -24,5 +29,6 @@ export default {
   createPost,
   updatePost,
   deletePost,
+  getPost,
   getAllPosts,
 };

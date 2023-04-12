@@ -8,6 +8,6 @@ PostRouter.post('/create', AuthMiddleware, PostController.createPost);
 PostRouter.put('/update/:id', AuthMiddleware, PostController.updatePost);
 PostRouter.delete('/delete/:id', AuthMiddleware, PostController.deletePost);
 PostRouter.get('/posts', AuthMiddleware, PostController.getAllPosts);
-PostRouter.get('/posts/:id', AuthMiddleware, PostController.getAllPosts);
+PostRouter.get('/post/:id', AuthMiddleware, PostController.getPost);
 
 export default PostRouter;
