@@ -37,7 +37,9 @@ const createPost = async (req, res) => {
       dislike: req.body.dislike,
     };
     const post = await PostService.createPost(newPost);
-    res.status(201).json({ message: 'Post created successfully', post });
+    res
+      .status(201)
+      .json({ status: 'success', message: 'Post created successfully.', post });
   } catch (error) {
     res.status(500).json({ status: 'error', error });
   }
@@ -65,13 +67,17 @@ const updatePost = async (req, res) => {
       { _id: id },
       { $set: updatePostData }
     );
-    res
-      .status(200)
-      .json({ message: 'Post Updated Successfully', post: updatedPost });
+    res.status(200).json({
+      status: 'success',
+      message: 'Post updated successfully.',
+      post: updatedPost,
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Error Updating Post', error: err.message });
+    res.status(500).json({
+      status: 'error',
+      message: 'Error updating post.',
+      error: err.message,
+    });
   }
 };
 
@@ -79,22 +85,34 @@ const deletePost = async (req, res) => {
   const { id } = req.params;
   try {
     const deletedPost = await PostService.updatePost({ _id: id });
-    res.status(200).json({ message: 'Post deleted successfully', deletedPost });
+    res.status(200).json({
+      status: 'success',
+      message: 'Post deleted successfully.',
+      deletedPost,
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Error Deleting Post', error: err.message });
+    res.status(500).json({
+      status: 'error',
+      message: 'Error deleting post.',
+      error: err.message,
+    });
   }
 };
 
 const getAllPosts = async (req, res) => {
   try {
     const allPosts = await PostService.getAllPosts();
-    res.status(200).json({ message: 'Get all successfully', allPosts });
+    res.status(200).json({
+      status: 'success',
+      message: 'Get all posts successfully',
+      allPosts,
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Error Fatching All Post', error: err.message });
+    res.status(500).json({
+      status: 'error',
+      message: 'Error fatching all posts',
+      error: err.message,
+    });
   }
 };
 

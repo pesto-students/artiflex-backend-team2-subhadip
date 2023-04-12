@@ -7,6 +7,8 @@ import config from '../config';
 import UserModel from '../models/user.model';
 
 import { UserService } from '../services';
+import userController from './user.controller';
+import userService from '../services/user.service';
 
 const logger = Logger('auth.controller.js');
 
@@ -58,7 +60,10 @@ const signUp = async (req, res) => {
 
 const signIn = async (req, res) => {
   try {
-    const existingUser = await UserModel.findOne({ email: req.body.email });
+    const existingUser = await userService.getUser({
+      email: req.body.email,
+    });
+
     if (!existingUser) {
       res.status(401).json({
         status: 'error',

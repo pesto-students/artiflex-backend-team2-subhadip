@@ -6,30 +6,34 @@ const UserSchema = new mongoose.Schema(
       type: String,
       allowNull: false,
       uniqueKey: false,
+      required: [true, 'Please enter a valid first name'],
     },
     last_name: {
       type: String,
       allowNull: true,
       uniqueKey: false,
+      required: [true, 'Please enter a valid last name'],
     },
     image: {
       type: String,
       allowNull: true,
       defaultValue:
         'https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png',
+      required: false,
     },
     email: {
       type: String,
-      required: true,
       unique: true,
+      required: [true, 'Please enter a valid email id'],
     },
     mobile_no: {
       type: String,
       allowNull: true,
+      required: [true, 'Please enter a valid mobile no'],
     },
     password: {
       type: String,
-      required: true,
+      required: [true, 'Please enter a valid password'],
     },
   },
   {

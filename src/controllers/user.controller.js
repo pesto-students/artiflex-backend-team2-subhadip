@@ -28,7 +28,9 @@ const createUser = async (req, res) => {
       password: req.body.password,
     };
     const user = await UserService.createUser(newUser);
-    res.status(201).json({ message: 'Uer created successfully', user });
+    res
+      .status(201)
+      .json({ status: 'success', message: 'User created successfully', user });
   } catch (error) {
     res.status(500).json({ status: 'error', error });
   }
@@ -36,45 +38,99 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { user } = req;
+    const userSchema = Joi.object({
+      first_name: Joi.string().required(),
+      last_name: Joi.string().required(),
+      email: Joi.string().required(),
+      mobile_no: Joi.string().required(),
+      password: Joi.string().required(),
+    });
+    const { error } = userSchema.validate(req.body);
+
+    if (error) {
+      res.status(500).json({ status: 'error', error });
+      return;
+    }
+
     const id = req.params.id;
 
     const updateUserData = {
-      user_id: user.id,
-      creater_id: user.id,
-      title: req.body.title,
-      description: req.body.description,
-      post_type: req.body.post_type,
-      tags: req.body.tags,
-      for_sell: req.body.for_sell,
-      post_price: req.body.post_price,
-      like: req.body.like,
-      dislike: req.body.dislike,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      email: req.body.email,
+      mobile_no: req.body.mobile_no,
+      password: req.body.password,
     };
 
-    const updatedPost = await PostService.updateUser(
+    const updatedPost = await UserService.updateUser(
       { _id: id },
       { $set: updateUserData }
     );
-    res
-      .status(200)
-      .json({ message: 'Post Updated Successfully', post: updatedPost });
+    res.status(200).json({
+      status: 'success',
+      message: 'User updated successfully.',
+      post: updatedPost,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'success',
+      message: 'Error updating post.',
+      error: err.message,
+    });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedUser = await UserService.deleteUser({ _id: id });
+    res.status(200).json({
+      status: 'success',
+      message: 'User deleted successfully.',
+      deletedUser,
+    });
   } catch (err) {
     res
       .status(500)
-      .json({ message: 'Error Updating Post', error: err.message });
+      .json({ message: 'Error deleting user.', error: err.message });
+  }
+};
+
+const getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const User = await UserService.getUser({ _id: id });
+    res
+      .status(200)
+      .json({ status: 'success', message: 'Get user successfully.', User });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Error fatching user.',
+      error: err.message,
+    });
   }
 };
 
 const getAllUsers = async (req, res) => {
   try {
     const allUsers = await UserService.getAllUsers();
-    res.status(200).json({ message: 'Get all successfully', allUsers });
-  } catch (err) {
     res
-      .status(500)
-      .json({ message: 'Error Fatching All Post', error: err.message });
+      .status(200)
+      .json({ status: 'success', message: 'Get all successfully.', allUsers });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Error fatching all users.',
+      error: err.message,
+    });
   }
 };
 
-export default { createUser, updateUser, getAllUsers };
+export default {
+  createUser,
+  updateUser,
+  deleteUser,
+  getUser,
+  getAllUsers,
+};

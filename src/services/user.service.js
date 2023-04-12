@@ -16,7 +16,7 @@ const deleteUser = async (id) => {
 };
 
 const getUser = async (userData) => {
-  const User = await UserModel.find(userData);
+  const User = await UserModel.findOne(userData);
   return User;
 };
 
