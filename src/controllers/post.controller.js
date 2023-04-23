@@ -9,11 +9,8 @@ const createPost = async (req, res) => {
     const postSchema = Joi.object({
       title: Joi.string().required(),
       description: Joi.string().required(),
-      post_url: Joi.string().required(),
       post_type: Joi.string().required(),
       tags: Joi.string().required(),
-      for_sell: Joi.number().required(),
-      post_price: Joi.number().required(),
     });
     const { error } = postSchema.validate(req.body);
 
@@ -84,7 +81,7 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedPost = await PostService.updatePost({ _id: id });
+    const deletedPost = await PostService.deletedPost({ _id: id });
     res.status(200).json({
       status: 'success',
       message: 'Post deleted successfully.',

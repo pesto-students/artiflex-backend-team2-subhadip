@@ -5,10 +5,14 @@ const PostSchema = new mongoose.Schema(
     user_id: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      allowNull: false,
+      required: [true, 'Please enter a valid user id'],
     },
     creater_id: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      allowNull: false,
+      required: [true, 'Please enter a valid user id'],
     },
     title: {
       type: String,
@@ -22,7 +26,8 @@ const PostSchema = new mongoose.Schema(
     },
     post_url: {
       type: String,
-      allowNull: true,
+      allowNull: false,
+      default: '',
     },
     post_type: {
       type: String,
@@ -32,30 +37,32 @@ const PostSchema = new mongoose.Schema(
     tags: {
       type: String,
       allowNull: false,
+      default: '',
+      required: [true, 'Please enter a valid tags'],
     },
     for_sell: {
       type: Number,
       allowNull: false,
-      defaultValue: 0,
-      required: [true, 'Please enter a valid for sell data'],
+      required: [true, 'Please enter a valid for sell'],
+      default: 0,
     },
     post_price: {
       type: Number,
       allowNull: false,
-      defaultValue: 0,
       required: [true, 'Please enter a valid post price'],
+      default: 0,
     },
     like: {
       type: Number,
       allowNull: false,
-      defaultValue: 0,
       required: [true, 'Please enter a valid like'],
+      default: 0,
     },
     dislike: {
       type: Number,
       allowNull: false,
-      defaultValue: 0,
       required: [true, 'Please enter a valid dislike'],
+      default: 0,
     },
   },
   {

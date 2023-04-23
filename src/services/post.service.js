@@ -10,25 +10,32 @@ const updatePost = async (condition, postData) => {
   return updatedPost;
 };
 
-const deletePost = async (id) => {
-  const deletedPost = await PostModel.deleteOne({ _id: id });
+const deletedPost = async (condition) => {
+  console.log(condition);
+  const deletedPost = await PostModel.deleteOne(condition);
   return deletedPost;
 };
 
 const getPost = async (postData) => {
-  const Post = await PostModel.findOne(postData);
+  const Post = await PostModel.findOne(postData).populate([
+    { path: 'user_id', select: '-password' },
+    { path: 'creater_id', select: '-password' },
+  ]);
   return Post;
 };
 
 const getAllPosts = async () => {
-  const allPosts = await PostModel.find();
+  const allPosts = await PostModel.find().populate([
+    { path: 'user_id', select: '-password' },
+    { path: 'creater_id', select: '-password' },
+  ]);
   return allPosts;
 };
 
 export default {
   createPost,
   updatePost,
-  deletePost,
+  deletedPost,
   getPost,
   getAllPosts,
 };

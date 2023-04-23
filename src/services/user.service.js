@@ -10,8 +10,8 @@ const updateUser = async (condition, userData) => {
   return updatedUser;
 };
 
-const deleteUser = async (id) => {
-  const deletedUser = await UserModel.deleteOne({ _id: id });
+const deleteUser = async (condition) => {
+  const deletedUser = await UserModel.deleteOne(condition);
   return deletedUser;
 };
 
