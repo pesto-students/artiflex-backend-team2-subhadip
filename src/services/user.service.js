@@ -1,7 +1,7 @@
 import UserModel from '../models/user.model';
 import Logger from '../utils/logger';
 
-const logger = Logger('user.controller');
+const logger = Logger('user.service');
 
 const createUser = (userData) => UserModel.create(userData);
 
