@@ -1,7 +1,7 @@
 import PostModel from '../models/post.model';
 import Logger from '../utils/logger';
 
-const logger = Logger('post.controller');
+const logger = Logger('post.service');
 
 const createPost = (postData) => PostModel.create(postData);
 

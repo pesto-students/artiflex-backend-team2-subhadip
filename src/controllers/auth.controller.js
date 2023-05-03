@@ -7,10 +7,9 @@ import config from '../config';
 import UserModel from '../models/user.model';
 
 import { UserService } from '../services';
-import userController from './user.controller';
 import userService from '../services/user.service';
 
-const logger = Logger('auth.controller.js');
+const logger = Logger('auth.controller');
 
 const signUp = async (req, res) => {
   try {
