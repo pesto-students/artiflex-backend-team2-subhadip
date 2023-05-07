@@ -1,15 +1,12 @@
 import express from 'express';
 import { AuthController } from '../controllers';
 
-import { AuthMiddleware } from '../middlewares';
-
 const AuthRouter = express.Router();
 
 const errorMessage = { message: 'Access Forbidden' };
 
 AuthRouter.post('/signup', AuthController.signUp);
 AuthRouter.post('/signin', AuthController.signIn);
-AuthRouter.post('/user', AuthMiddleware, AuthController.signInUser);
 
 AuthRouter.get('*', (req, res) => {
   res.status(404).send(errorMessage);

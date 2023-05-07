@@ -25,7 +25,7 @@ const AuthMiddleware = (req, res, next) => {
       });
       return;
     }
-    req.user = payload.user;
+    req.user = payload;
     next();
   });
 };

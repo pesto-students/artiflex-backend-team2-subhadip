@@ -1,11 +1,15 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Joi from 'joi';
 import Logger from '../utils/logger';
 import config from '../config';
 
 import UserModel from '../models/user.model';
 
-const logger = Logger('auth.controller.js');
+import { UserService } from '../services';
+import userService from '../services/user.service';
+
+const logger = Logger('auth.controller');
 
 const signUp = async (req, res) => {
   try {
@@ -14,22 +18,40 @@ const signUp = async (req, res) => {
     });
 
     if (existingUser) {
-      res.status(400).send({ status: 'ok', message: 'User already exists' });
+      res
+        .status(400)
+        .send({ status: 'success', message: 'User already exists' });
+    } else {
+      const userSchema = Joi.object({
+        first_name: Joi.string().required(),
+        last_name: Joi.string().required(),
+        email: Joi.string().required(),
+        mobile_no: Joi.string().required(),
+        password: Joi.string().required(),
+      });
+      const { error } = userSchema.validate(req.body);
+
+      if (error) {
+        res.status(500).json({ status: 'error', error });
+        return;
+      }
+
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+      const newUser = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        mobile_no: req.body.mobile_no,
+        password: hashedPassword,
+      };
+
+      const result = await UserService.createUser(newUser);
+
+      res
+        .status(201)
+        .json({ status: 'success', message: 'User Created', user: result });
     }
-
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-    const result = await UserModel.create({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      mobile_no: req.body.mobile_no,
-      password: hashedPassword,
-    });
-
-    res
-      .status(201)
-      .json({ status: 'ok', message: 'User Created', user: result });
   } catch (error) {
     res.status(400).json({ status: 'error', error: 'Something want wrong.' });
   }
@@ -37,7 +59,10 @@ const signUp = async (req, res) => {
 
 const signIn = async (req, res) => {
   try {
-    const existingUser = await UserModel.findOne({ email: req.body.email });
+    const existingUser = await userService.getUser({
+      email: req.body.email,
+    });
+
     if (!existingUser) {
       res.status(401).json({
         status: 'error',
@@ -70,9 +95,9 @@ const signIn = async (req, res) => {
 
     // Return the token in the response
     res.status(201).send({
-      status: 'ok',
+      status: 'success',
       message: 'User Found',
-      user: existingUser,
+      // user: existingUser,
       token,
     });
     return;
@@ -81,13 +106,7 @@ const signIn = async (req, res) => {
   }
 };
 
-const signInUser = async (req, res) => {
-  logger.info('Hello There');
-  res.status(201).json({ message: 'Hello There' });
-};
-
 export default {
   signUp,
   signIn,
-  signInUser,
 };
