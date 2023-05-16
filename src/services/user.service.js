@@ -21,7 +21,7 @@ const getUser = async (userData) => {
 };
 
 const getAllUsers = async () => {
-  const allUsers = await UserModel.find();
+  const allUsers = await UserModel.find().select('-password');
   return allUsers;
 };
 

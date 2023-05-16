@@ -26,8 +26,8 @@ const PostSchema = new mongoose.Schema(
     },
     post_url: {
       type: String,
-      allowNull: false,
-      default: '',
+      allowNull: true,
+      default: null,
     },
     post_type: {
       type: String,

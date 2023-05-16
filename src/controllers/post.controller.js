@@ -10,12 +10,15 @@ const createPost = async (req, res) => {
       title: Joi.string().required(),
       description: Joi.string().required(),
       post_type: Joi.string().required(),
+      post_url: Joi.string(),
       tags: Joi.string().required(),
     });
     const { error } = postSchema.validate(req.body);
 
     if (error) {
-      res.status(500).json({ status: 'error', error });
+      res
+        .status(500)
+        .json({ status: 'error', message: 'Validation error', error });
       return;
     }
 
@@ -38,14 +41,32 @@ const createPost = async (req, res) => {
       .status(201)
       .json({ status: 'success', message: 'Post created successfully.', post });
   } catch (error) {
-    res.status(500).json({ status: 'error', error });
+    res
+      .status(500)
+      .json({ status: 'error', message: 'Error creating post.', error });
   }
 };
 
 const updatePost = async (req, res) => {
   try {
+    const postSchema = Joi.object({
+      title: Joi.string().required(),
+      description: Joi.string().required(),
+      post_type: Joi.string().required(),
+      post_url: Joi.string(),
+      tags: Joi.string().required(),
+    });
+    const { error } = postSchema.validate(req.body);
+
+    if (error) {
+      res
+        .status(500)
+        .json({ status: 'error', message: 'Validation error', error });
+      return;
+    }
+
     const { user } = req;
-    const id = req.params.id;
+    const { id } = req.params.id;
 
     const updatePostData = {
       user_id: user.id,
@@ -69,11 +90,11 @@ const updatePost = async (req, res) => {
       message: 'Post updated successfully.',
       post: updatedPost,
     });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
       status: 'error',
       message: 'Error updating post.',
-      error: err.message,
+      error,
     });
   }
 };
@@ -81,17 +102,17 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedPost = await PostService.deletedPost({ _id: id });
+    const deletedPost = await PostService.deletePost({ _id: id });
     res.status(200).json({
       status: 'success',
       message: 'Post deleted successfully.',
       deletedPost,
     });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
       status: 'error',
       message: 'Error deleting post.',
-      error: err.message,
+      error,
     });
   }
 };
@@ -100,14 +121,19 @@ const getPost = async (req, res) => {
   try {
     const { id } = req.params;
     const Post = await PostService.getPost({ _id: id });
+
+    if (!Post) {
+      res.status(404).json({ status: 'error', message: 'Data not found' });
+    }
+
     res
       .status(200)
       .json({ status: 'success', message: 'Get post successfully.', Post });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
       status: 'error',
       message: 'Error fatching post.',
-      error: err.message,
+      error,
     });
   }
 };
@@ -115,16 +141,19 @@ const getPost = async (req, res) => {
 const getAllPosts = async (req, res) => {
   try {
     const allPosts = await PostService.getAllPosts();
+    if (!allPosts) {
+      res.status(404).json({ status: 'error', message: 'Data not found' });
+    }
     res.status(200).json({
       status: 'success',
       message: 'Get all posts successfully',
       allPosts,
     });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
       status: 'error',
       message: 'Error fatching all posts',
-      error: err.message,
+      error,
     });
   }
 };

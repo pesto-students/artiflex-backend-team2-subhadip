@@ -32,7 +32,9 @@ const createUser = async (req, res) => {
       .status(201)
       .json({ status: 'success', message: 'User created successfully', user });
   } catch (error) {
-    res.status(500).json({ status: 'error', error });
+    res
+      .status(500)
+      .json({ status: 'error', message: 'Error creating user.', error });
   }
 };
 
@@ -52,7 +54,7 @@ const updateUser = async (req, res) => {
       return;
     }
 
-    const id = req.params.id;
+    const { id } = req.params.id;
 
     const updateUserData = {
       first_name: req.body.first_name,
@@ -71,11 +73,11 @@ const updateUser = async (req, res) => {
       message: 'User updated successfully.',
       post: updatedPost,
     });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
-      status: 'success',
-      message: 'Error updating post.',
-      error: err.message,
+      status: 'error',
+      message: 'Error updating user.',
+      error,
     });
   }
 };
@@ -89,10 +91,12 @@ const deleteUser = async (req, res) => {
       message: 'User deleted successfully.',
       deletedUser,
     });
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Error deleting user.', error: err.message });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Error deleting user.',
+      error,
+    });
   }
 };
 
@@ -100,14 +104,17 @@ const getUser = async (req, res) => {
   try {
     const { id } = req.params;
     const User = await UserService.getUser({ _id: id });
+    if (!User) {
+      res.status(404).json({ status: 'error', message: 'Data not found' });
+    }
     res
       .status(200)
       .json({ status: 'success', message: 'Get user successfully.', User });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
       status: 'error',
       message: 'Error fatching user.',
-      error: err.message,
+      error,
     });
   }
 };
@@ -115,14 +122,17 @@ const getUser = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const allUsers = await UserService.getAllUsers();
+    if (!allUsers) {
+      res.status(404).json({ status: 'error', message: 'Data not found' });
+    }
     res
       .status(200)
       .json({ status: 'success', message: 'Get all successfully.', allUsers });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
       status: 'error',
       message: 'Error fatching all users.',
-      error: err.message,
+      error,
     });
   }
 };

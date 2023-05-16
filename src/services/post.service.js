@@ -10,8 +10,7 @@ const updatePost = async (condition, postData) => {
   return updatedPost;
 };
 
-const deletedPost = async (condition) => {
-  console.log(condition);
+const deletePost = async (condition) => {
   const deletedPost = await PostModel.deleteOne(condition);
   return deletedPost;
 };
@@ -35,7 +34,7 @@ const getAllPosts = async () => {
 export default {
   createPost,
   updatePost,
-  deletedPost,
+  deletePost,
   getPost,
   getAllPosts,
 };

@@ -4,10 +4,9 @@ import Joi from 'joi';
 import Logger from '../utils/logger';
 import config from '../config';
 
-import UserModel from '../models/user.model';
+import UserModel from '../models';
 
 import { UserService } from '../services';
-import userService from '../services/user.service';
 
 const logger = Logger('auth.controller');
 
@@ -53,16 +52,15 @@ const signUp = async (req, res) => {
         .json({ status: 'success', message: 'User Created', user: result });
     }
   } catch (error) {
-    res.status(400).json({ status: 'error', error: 'Something want wrong.' });
+    res.status(400).json({ status: 'error', error });
   }
 };
 
 const signIn = async (req, res) => {
   try {
-    const existingUser = await userService.getUser({
+    const existingUser = await UserService.getUser({
       email: req.body.email,
     });
-
     if (!existingUser) {
       res.status(401).json({
         status: 'error',
@@ -94,15 +92,16 @@ const signIn = async (req, res) => {
     );
 
     // Return the token in the response
+    delete existingUser.password;
     res.status(201).send({
       status: 'success',
       message: 'User Found',
-      // user: existingUser,
+      user: existingUser,
       token,
     });
     return;
   } catch (error) {
-    res.status(500).json({ status: 'error', error: 'Something Want Wrong.' });
+    res.status(500).json({ status: 'error', error });
   }
 };
 

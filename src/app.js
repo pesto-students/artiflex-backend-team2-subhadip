@@ -35,6 +35,7 @@ app.use('/demo', Routes.DemoRoutes);
 app.use('/auth', Routes.AuthRoutes);
 app.use('/post', Routes.PostRouter);
 app.use('/user', Routes.UserRouter);
+app.use('/wallet', Routes.WalletRouter);
 
 app.listen(config.SERVER_PORT || 4000, () => {
   logger.info(`Server Is Up At http://localhost:${config.SERVER_PORT}`);
