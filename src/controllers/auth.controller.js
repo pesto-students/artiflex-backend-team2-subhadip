@@ -4,22 +4,18 @@ import Joi from 'joi';
 import Logger from '../utils/logger';
 import config from '../config';
 
-import UserModel from '../models';
-
 import { UserService } from '../services';
 
 const logger = Logger('auth.controller');
 
 const signUp = async (req, res) => {
   try {
-    const existingUser = await UserModel.findOne({
+    const existingUser = await UserService.getUser({
       email: req.body.email,
     });
 
     if (existingUser) {
-      res
-        .status(400)
-        .send({ status: 'success', message: 'User already exists' });
+      res.status(400).send({ status: 'error', message: 'User already exists' });
     } else {
       const userSchema = Joi.object({
         first_name: Joi.string().required(),
@@ -32,7 +28,6 @@ const signUp = async (req, res) => {
 
       if (error) {
         res.status(500).json({ status: 'error', error });
-        return;
       }
 
       const hashedPassword = await bcrypt.hash(req.body.password, 10);

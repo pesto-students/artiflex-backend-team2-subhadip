@@ -3,6 +3,7 @@ import AuthController from './auth.controller';
 import PostController from './post.controller';
 import UserController from './user.controller';
 import WalletController from './wallet.controller';
+import TokenTransactionController from './token_transaction.controller';
 
 export {
   DemoController,
@@ -10,4 +11,5 @@ export {
   UserController,
   PostController,
   WalletController,
+  TokenTransactionController,
 };

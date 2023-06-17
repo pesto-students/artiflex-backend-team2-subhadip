@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       allowNull: true,
       required: [true, 'Please enter a valid profile img'],
-      defaultValue:
+      default:
         'https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png',
     },
     email: {
