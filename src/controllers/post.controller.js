@@ -12,6 +12,8 @@ const createPost = async (req, res) => {
       post_type: Joi.string().required(),
       post_url: Joi.string(),
       tags: Joi.string().required(),
+      for_sell: Joi.string().required(),
+      post_price: Joi.string().required(),
     });
     const { error } = postSchema.validate(req.body);
 
@@ -55,6 +57,8 @@ const updatePost = async (req, res) => {
       post_type: Joi.string().required(),
       post_url: Joi.string(),
       tags: Joi.string().required(),
+      for_sell: Joi.string().required(),
+      post_price: Joi.string().required(),
     });
     const { error } = postSchema.validate(req.body);
 
