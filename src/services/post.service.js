@@ -23,8 +23,8 @@ const getPost = async (postData) => {
   return Post;
 };
 
-const getAllPosts = async () => {
-  const allPosts = await PostModel.find().populate([
+const getAllPostsQuery = async (condition) => {
+  const allPosts = await PostModel.find(condition).populate([
     { path: 'user_id', select: '-password' },
     { path: 'creater_id', select: '-password' },
   ]);
@@ -36,5 +36,5 @@ export default {
   updatePost,
   deletePost,
   getPost,
-  getAllPosts,
+  getAllPostsQuery,
 };

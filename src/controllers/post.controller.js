@@ -143,9 +143,11 @@ const getPost = async (req, res) => {
   }
 };
 
-const getAllPosts = async (req, res) => {
+const getAllPostsQuery = async (req, res) => {
   try {
-    const allPosts = await PostService.getAllPosts();
+    const data = req.body;
+    const allPosts = await PostService.getAllPostsQuery(data);
+
     if (!allPosts) {
       res.status(404).json({ status: 'error', message: 'Data not found' });
     }
@@ -163,34 +165,10 @@ const getAllPosts = async (req, res) => {
   }
 };
 
-const getPostQuery = async (req, res) => {
-  try {
-    const data = req.body;
-    console.log(data);
-
-    const Post = await PostService.getPost(data);
-
-    if (!Post) {
-      res.status(404).json({ status: 'error', message: 'Data not found' });
-    }
-
-    res
-      .status(200)
-      .json({ status: 'success', message: 'Get post successfully.', Post });
-  } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      message: 'Error fatching post.',
-      error,
-    });
-  }
-};
-
 export default {
   createPost,
   updatePost,
   deletePost,
   getPost,
-  getAllPosts,
-  getPostQuery
+  getAllPostsQuery,
 };
