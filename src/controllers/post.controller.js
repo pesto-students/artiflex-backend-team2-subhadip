@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import Logger from '../utils/logger';
 import { PostService } from '../services';
+import { log } from 'winston';
 
 const logger = Logger('post.controller');
 
@@ -162,10 +163,34 @@ const getAllPosts = async (req, res) => {
   }
 };
 
+const getPostQuery = async (req, res) => {
+  try {
+    const data = req.body;
+    console.log(data);
+
+    const Post = await PostService.getPost(data);
+
+    if (!Post) {
+      res.status(404).json({ status: 'error', message: 'Data not found' });
+    }
+
+    res
+      .status(200)
+      .json({ status: 'success', message: 'Get post successfully.', Post });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Error fatching post.',
+      error,
+    });
+  }
+};
+
 export default {
   createPost,
   updatePost,
   deletePost,
   getPost,
   getAllPosts,
+  getPostQuery
 };
