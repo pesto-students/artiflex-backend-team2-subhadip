@@ -143,7 +143,7 @@ const getPost = async (req, res) => {
   }
 };
 
-const getAllPostsQuery = async (req, res) => {
+const getAllPosts = async (req, res) => {
   try {
     const data = req.body;
     const allPosts = await PostService.getAllPostsQuery(data);
@@ -165,10 +165,33 @@ const getAllPostsQuery = async (req, res) => {
   }
 };
 
+const getAllPostsByUserId = async (req, res) => {
+  try {
+    const data = req.body;
+    const allPosts = await PostService.getAllPostsQuery(data);
+
+    if (!allPosts) {
+      res.status(404).json({ status: 'error', message: 'Data not found' });
+    }
+    res.status(200).json({
+      status: 'success',
+      message: 'Get all posts by user id successfully',
+      allPosts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Error fatching all posts',
+      error,
+    });
+  }
+};
+
 export default {
   createPost,
   updatePost,
   deletePost,
   getPost,
-  getAllPostsQuery,
+  getAllPosts,
+  getAllPostsByUserId,
 };
