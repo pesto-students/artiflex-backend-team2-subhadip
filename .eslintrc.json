@@ -14,7 +14,8 @@
   "rules": {
     "prettier/prettier": "error",
     "no-extraneous-dependencies": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "no-underscore-dangle": "off"
   },
   "globals": {
     "__dirname": true
