@@ -37,7 +37,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
-    "@sentry/node": "^7.44.2",
+    "@sentry/node": "^10.0.0",
     "@sentry/tracing": "^7.44.2",
     "@types/jest": "^29.4.0",
     "axios": "^1.4.0",
